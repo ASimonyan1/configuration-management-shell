@@ -39,3 +39,15 @@ GUI выводит настройки, команды и результаты; �
 `examples/check_vfs.bat` и `examples/check_overrides.bat` демонстрируют
 минимальную, многофайловую и вложенную VFS. `scripts/stage3.txt` проверяет
 режимы команд и ошибки. Тесты: `python -m unittest discover -s tests -v`.
+
+## Этап 4 — основные команды
+
+Добавлены `rev ФАЙЛ`, `tail [-n N | -N] ФАЙЛ`, `who`.
+`rev` переворачивает каждую строку, `tail` показывает последние N строк
+(по умолчанию 10), `who` показывает пользователя, компьютер и каталог.
+`parse_tail` и `parse_count` проверяют аргументы tail.
+
+Примеры: `rev /home/student/readme.txt`, `tail -n 3 /home/student/readme.txt`,
+`who`, `rev /bin/data.bin`, `tail -n x /home/student/readme.txt`.
+Сценарий: `python -m src.main --vfs vfs.csv --script scripts/stage4.txt`.
+Тесты: `python -m unittest discover -s tests -v`.
