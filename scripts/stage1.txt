@@ -1,0 +1,8 @@
+# REPL: команды, неверные аргументы, неизвестная команда, выход.
+ls
+cd /
+ls -x
+cd / /home
+unknown_command
+exit bad
+exit
