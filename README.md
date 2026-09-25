@@ -25,3 +25,17 @@ GUI выводит настройки, команды и результаты; �
 Запуск: `python -m src.main --config config.json` или `.\run.bat`.
 Проверки: `python -m unittest discover -s tests -v`.
 Демонстрация: `examples/check_config.bat`, `examples/check_overrides.bat`.
+
+## Этап 3 — VFS
+
+Подключена CSV-система в памяти с полями path,type,content,encoding,owner.
+Файлы text/base64, каталоги dir, вложенность не ограничена.
+`VirtualFileSystem.load_csv` загружает и проверяет CSV; `resolve`, `get`,
+`list_dir`, `change_dir`, `read_text` работают в памяти. Функции разбора
+и проверки строк CSV отделены от дерева. Детали описаны в docstring.
+Работают `ls [-l] [ПУТЬ]`, `cd [ПУТЬ]`, `exit`.
+
+Пример: `ls /`, `cd /home/student/docs/project`, `ls -l`, `cd /missing`.
+`examples/check_vfs.bat` и `examples/check_overrides.bat` демонстрируют
+минимальную, многофайловую и вложенную VFS. `scripts/stage3.txt` проверяет
+режимы команд и ошибки. Тесты: `python -m unittest discover -s tests -v`.

@@ -1,0 +1,35 @@
+path,type,content,encoding,owner
+/home,dir,,text,root
+/home/student,dir,,text,student
+/home/student/readme.txt,file,"Первая строка
+Вторая строка
+Третья строка
+Четвёртая строка
+Пятая строка
+Шестая строка
+Седьмая строка
+Восьмая строка
+Девятая строка
+Десятая строка
+Одиннадцатая строка
+Двенадцатая строка",text,student
+/home/student/docs,dir,,text,student
+/home/student/docs/project,dir,,text,student
+/home/student/docs/project/info.txt,file,"variant 26
+python shell emulator
+three-level VFS",text,student
+/etc,dir,,text,root
+/etc/hosts.txt,file,"127.0.0.1 localhost
+192.168.0.2 demo-host",text,root
+/var,dir,,text,root
+/var/log,dir,,text,root
+/var/log/app.log,file,"start
+load config
+load vfs
+ready
+command ls
+command cd
+command tail
+finish",text,root
+/bin,dir,,text,root
+/bin/data.bin,file,AAECA/8KFB4=,base64,root
