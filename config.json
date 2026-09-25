@@ -1,0 +1,5 @@
+{
+  "vfs": "vfs.csv",
+  "prompt": "emu> ",
+  "script": "scripts/all_commands.txt"
+}

@@ -12,5 +12,16 @@
 обрабатывают Enter и закрытие. Все функции имеют docstring.
 Настройки запуска появятся на втором этапе.
 
-Проверка вручную: `ls`, `cd /`, `ls -x`, `cd / /home`, `unknown`,
-`exit bad`, `exit`. Примеры также записаны в `scripts/stage1.txt`.
+
+## Этап 2 — конфигурация
+
+Добавлены `--vfs`, `--prompt`, `--script`, `--config` и JSON-поля
+`vfs`, `prompt`, `script`. CLI перекрывает JSON. Пути относительны корню.
+VFS ещё не читается. `resolve_config` объединяет настройки,
+`load_json_config` проверяет JSON, `iter_script_commands` читает сценарий.
+GUI выводит настройки, команды и результаты; комментарии `#` пропускаются.
+Функции и остальные методы описаны в docstring.
+
+Запуск: `python -m src.main --config config.json` или `.\run.bat`.
+Проверки: `python -m unittest discover -s tests -v`.
+Демонстрация: `examples/check_config.bat`, `examples/check_overrides.bat`.
