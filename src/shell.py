@@ -110,6 +110,7 @@ class ShellEmulator:
             "rev": self._cmd_rev,
             "tail": self._cmd_tail,
             "who": self._cmd_who,
+            "chown": self._cmd_chown,
             "exit": self._cmd_exit,
         }
         handler = handlers.get(parts[0])
@@ -149,6 +150,13 @@ class ShellEmulator:
         require_count(args, NO_ARGS, "who: команда не принимает аргументы")
         return f"{self.username}\t{self.hostname}\t{self.vfs.cwd}"
 
+    def _cmd_chown(self, args):
+        """Изменить владельца файла или каталога в памяти."""
+        require_count(
+            args, OWNER_PATH_ARGS, "chown: использование: chown ВЛАДЕЛЕЦ ПУТЬ"
+        )
+        self.vfs.chown(*args)
+        return ""
 
     def _cmd_exit(self, args):
         """Запросить закрытие GUI, проверив отсутствие аргументов."""

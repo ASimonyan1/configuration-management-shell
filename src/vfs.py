@@ -165,3 +165,8 @@ class VirtualFileSystem:
             )
         return node.content.decode("utf-8")
 
+    def chown(self, owner, path):
+        """Изменить владельца узла исключительно в оперативной памяти."""
+        if not owner:
+            raise EmulatorError("chown: владелец не может быть пустым")
+        self.get(path).owner = owner
