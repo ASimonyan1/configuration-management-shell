@@ -1,0 +1,6 @@
+# Минимальная VFS.
+ls /
+ls -l /hello.txt
+cd /
+cd /missing
+exit

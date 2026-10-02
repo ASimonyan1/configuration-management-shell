@@ -7,15 +7,16 @@ from .config import parse_args, resolve_config
 from .errors import EmulatorError
 from .gui import EmulatorGUI
 from .shell import ShellEmulator
-from types import SimpleNamespace
+from .vfs import VirtualFileSystem
 
 
 def build_shell(args):
-    """Прочитать настройки; подключение VFS появится на этапе 3."""
+    """Проверить настройки и загрузить VFS до открытия окна."""
     config = resolve_config(args)
     if not config.vfs:
         raise EmulatorError("Не задан VFS: используйте --vfs или --config")
-    vfs = SimpleNamespace(cwd="/")
+    vfs = VirtualFileSystem()
+    vfs.load_csv(config.vfs)
     prompt = "$ " if config.prompt is None else config.prompt
     return ShellEmulator(vfs, prompt), config
 

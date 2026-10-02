@@ -1,6 +1,21 @@
-# Проверка приглашения и выполнения сценария с комментариями.
-
+# VFS: корень, абсолютные и относительные пути, три уровня, ошибки.
 ls
-cd /
+ls -l /
+ls /home/student/readme.txt
+cd /home/student/docs/project
+ls
+cd ..
+ls .
+cd ../../..
+ls
+cd
+ls -l -l
+ls -x
+ls . /
+cd /no_such_dir
+cd /home/student/readme.txt
+cd / /home
+ls /missing
 unknown_command
+exit invalid
 exit
