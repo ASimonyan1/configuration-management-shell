@@ -1,3 +1,23 @@
+# VFS: корень, абсолютные и относительные пути, три уровня, ошибки.
+ls
+ls -l /
+ls /home/student/readme.txt
+cd /home/student/docs/project
+ls
+cd ..
+ls .
+cd ../../..
+ls
+cd
+ls -l -l
+ls -x
+ls . /
+cd /no_such_dir
+cd /home/student/readme.txt
+cd / /home
+ls /missing
+unknown_command
+exit invalid
 # Основные команды: штатные режимы и ошибки.
 ls
 ls -l /home/student
@@ -25,4 +45,13 @@ tail /home
 tail /bin/data.bin
 who extra
 cd /missing
-exit
+# chown: файл, каталог, ошибки; исходный CSV остаётся неизменным.
+ls -l /home/student
+chown teacher /home/student/readme.txt
+ls -l /home/student/readme.txt
+chown teacher /home/student/docs
+ls -l /home/student
+chown
+chown teacher
+chown teacher /home extra
+chown teacher /missing
