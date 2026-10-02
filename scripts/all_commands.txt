@@ -1,21 +1,28 @@
-# VFS: корень, абсолютные и относительные пути, три уровня, ошибки.
+# Основные команды: штатные режимы и ошибки.
 ls
-ls -l /
-ls /home/student/readme.txt
-cd /home/student/docs/project
-ls
-cd ..
-ls .
-cd ../../..
-ls
-cd
-ls -l -l
-ls -x
-ls . /
-cd /no_such_dir
-cd /home/student/readme.txt
-cd / /home
-ls /missing
-unknown_command
-exit invalid
+ls -l /home/student
+cd /home/student
+rev readme.txt
+tail readme.txt
+tail -n 3 readme.txt
+tail -5 readme.txt
+tail -n 0 readme.txt
+tail -n 100 readme.txt
+who
+rev
+rev readme.txt extra
+rev /missing
+rev /home
+rev /bin/data.bin
+tail
+tail -n
+tail -n x readme.txt
+tail -n -1 readme.txt
+tail -x readme.txt
+tail readme.txt readme.txt
+tail /missing
+tail /home
+tail /bin/data.bin
+who extra
+cd /missing
 exit

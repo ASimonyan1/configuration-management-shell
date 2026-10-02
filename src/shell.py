@@ -37,8 +37,39 @@ def parse_ls(args):
     return long_mode, "." if path is None else path
 
 
+def parse_count(value):
+    """Преобразовать количество строк tail в неотрицательное число."""
+    try:
+        count = int(value)
+    except ValueError as exc:
+        raise EmulatorError("tail: N должно быть целым числом") from exc
+    if count < MIN_TAIL_COUNT:
+        raise EmulatorError("tail: N не может быть отрицательным")
+    return count
 
 
+def parse_tail(args):
+    """Разобрать tail ФАЙЛ, tail -n N ФАЙЛ и tail -N ФАЙЛ."""
+    count = DEFAULT_TAIL_COUNT
+    path = None
+    tokens = iter(args)
+    for arg in tokens:
+        if arg == "-n":
+            value = next(tokens, None)
+            if value is None:
+                raise EmulatorError("tail: после -n требуется число")
+            count = parse_count(value)
+        elif arg.startswith("-") and arg[1:].isdigit():
+            count = parse_count(arg[1:])
+        elif arg.startswith("-"):
+            raise EmulatorError(f"tail: неизвестный параметр: {arg}")
+        elif path is not None:
+            raise EmulatorError("tail: можно указать только один файл")
+        else:
+            path = arg
+    if path is None:
+        raise EmulatorError("tail: использование: tail [-n N | -N] ФАЙЛ")
+    return count, path
 
 
 def format_node(node, long_mode):
@@ -76,6 +107,9 @@ class ShellEmulator:
         handlers = {
             "ls": self._cmd_ls,
             "cd": self._cmd_cd,
+            "rev": self._cmd_rev,
+            "tail": self._cmd_tail,
+            "who": self._cmd_who,
             "exit": self._cmd_exit,
         }
         handler = handlers.get(parts[0])
@@ -97,8 +131,23 @@ class ShellEmulator:
         self.vfs.change_dir(args[0] if args else "/")
         return ""
 
+    def _cmd_rev(self, args):
+        """Развернуть символы отдельно в каждой строке текстового файла."""
+        require_count(args, ONE_ARG, "rev: использование: rev ФАЙЛ")
+        return "\n".join(
+            line[::-1] for line in self.vfs.read_text(args[0]).splitlines()
+        )
 
+    def _cmd_tail(self, args):
+        """Показать последние N строк; значение по умолчанию равно десяти."""
+        count, path = parse_tail(args)
+        lines = self.vfs.read_text(path).splitlines()
+        return "\n".join(lines[-count:]) if count else ""
 
+    def _cmd_who(self, args):
+        """Показать пользователя, компьютер и текущий каталог эмулятора."""
+        require_count(args, NO_ARGS, "who: команда не принимает аргументы")
+        return f"{self.username}\t{self.hostname}\t{self.vfs.cwd}"
 
 
     def _cmd_exit(self, args):
