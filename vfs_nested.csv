@@ -2,5 +2,5 @@ path,type,content,encoding,owner
 /a,dir,,text,root
 /a/b,dir,,text,root
 /a/b/c,dir,,text,root
-/a/b/c/file.txt,file,nested,text,user
-/other.txt,file,second file,text,user
+/a/b/c/file.txt,file,bmVzdGVk,base64,user
+/other.txt,file,c2Vjb25kIGZpbGU=,base64,user

@@ -30,13 +30,22 @@ def normalize(path, cwd="/"):
 
 
 def decode_content(content, encoding):
-    """Преобразовать текст или base64 в байты без записи на диск."""
-    if encoding == "text":
-        return content.encode("utf-8")
+    """Декодировать содержимое любого файла из Base64 в память."""
+    if encoding != "base64":
+        raise EmulatorError("VFS: файлы должны иметь encoding=base64")
     try:
         return base64.b64decode(content, validate=True)
     except (ValueError, binascii.Error) as exc:
         raise EmulatorError("VFS: неверный base64") from exc
+
+
+def is_binary(content):
+    """Отличить UTF-8 текст от двоичных байтов после декодирования."""
+    try:
+        text = content.decode("utf-8")
+    except UnicodeDecodeError:
+        return True
+    return any(ord(char) < 32 and char not in "\n\r\t" for char in text)
 
 
 def validate_node_fields(path, kind, encoding):
@@ -59,7 +68,7 @@ def parse_node(row):
     content = b""
     if kind == "file":
         content = decode_content(row.get("content") or "", encoding)
-    return VFSNode(normalize(path), kind, content, encoding == "base64", owner)
+    return VFSNode(normalize(path), kind, content, is_binary(content), owner)
 
 
 class VirtualFileSystem:
