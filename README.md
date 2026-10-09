@@ -1,3 +1,27 @@
+# Конфигурационное управление - вариант 26
+
+Для поэтапной сдачи выбирайте ветки submission-1–submission-5.
+Каждая ветка содержит свой README, команды запуска и результат этапа.
+
+## Ветки для сдачи
+
+Один репозиторий, отдельная версия для каждого этапа:
+
+- [submission-1: REPL](https://github.com/ASimonyan1/configuration-management-shell/tree/submission-1)
+- [submission-2: конфигурация](https://github.com/ASimonyan1/configuration-management-shell/tree/submission-2)
+- [submission-3: VFS](https://github.com/ASimonyan1/configuration-management-shell/tree/submission-3)
+- [submission-4: основные команды](https://github.com/ASimonyan1/configuration-management-shell/tree/submission-4)
+- [submission-5: chown](https://github.com/ASimonyan1/configuration-management-shell/tree/submission-5)
+
+На GitHub нажмите название текущей ветки над списком файлов и выберите
+нужную submission-N. Для скачивания этой версии: Code → Download ZIP.
+В локальном Git-проекте: `git switch submission-N`.
+
+
+---
+
+Ниже сохранена документация полной версии в main.
+
 # Эмулятор UNIX-подобной оболочки — вариант №26
 
 Практическая работа по конфигурационному управлению.
@@ -178,11 +202,11 @@ run.sh         запуск в Linux/macOS
 
 Пять коммитов отражают последовательность требований:
 
-1. `feat(repl): ...` — окно, парсер, заглушки `ls`/`cd`, `exit`.
-2. `feat(config): ...` — CLI, JSON, приоритеты, сценарии и первые тесты.
-3. `feat(vfs): ...` — CSV/base64, вложенность, операции в памяти.
-4. `feat(commands): ...` — режимы `ls`/`cd`, `rev`, `tail`, `who`.
-5. `feat(chown): ...` — изменение владельца в памяти и итоговые проверки.
+1. `feat: ...` — окно, парсер, заглушки `ls`/`cd`, `exit`.
+2. `feat: ...` — CLI, JSON, приоритеты, сценарии и первые тесты.
+3. `feat: ...` — CSV/base64, вложенность, операции в памяти.
+4. `feat: ...` — режимы `ls`/`cd`, `rev`, `tail`, `who`.
+5. `feat: ...` — изменение владельца в памяти и итоговые проверки.
 
 История восстановлена при исправлении работы, а не является журналом
 первоначальной разработки. В первом этапе папка `tests` содержит только
