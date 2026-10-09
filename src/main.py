@@ -1,20 +1,33 @@
-"""Запуск первого этапа: python -m src.main, без параметров."""
+"""Запуск второго этапа: python -m src.main с параметрами."""
 
 import sys
 import tkinter as tk
 
+from .config import parse_args, resolve_config
+from .errors import EmulatorError
 from .gui import EmulatorGUI
 from .shell import ShellEmulator
 
 
-def main():
-    """Создать графический REPL с заглушками ls/cd и командой exit."""
+def build_shell(args):
+    """Применить конфигурацию; путь VFS пока только отображается."""
+    config = resolve_config(args)
+    prompt = "$ " if config.prompt is None else config.prompt
+    return ShellEmulator(prompt), config
+
+
+def main(argv=None):
+    """Открыть REPL или вернуть код 2 при ошибке настроек и окна."""
+    args = parse_args(argv)
     try:
+        shell, config = build_shell(args)
         root = tk.Tk()
-    except tk.TclError as exc:
-        print(f"Не удалось открыть окно: {exc}", file=sys.stderr)
-        return 1
-    EmulatorGUI(root, ShellEmulator())
+    except (EmulatorError, tk.TclError) as exc:
+        print(f"Ошибка запуска: {exc}", file=sys.stderr)
+        return 2
+    gui = EmulatorGUI(root, shell)
+    gui.show_config(config, args.config)
+    gui.start_script(config.script)
     root.mainloop()
     return 0
 

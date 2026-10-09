@@ -1,0 +1,5 @@
+# Сценарий, заданный в JSON.
+ls
+cd /json
+unknown
+ls

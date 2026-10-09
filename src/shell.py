@@ -1,4 +1,4 @@
-"""Этап 1 варианта №26: парсер, заглушки ls/cd и завершение."""
+"""Этап 2 варианта №26: настраиваемый REPL с заглушками ls/cd."""
 
 import getpass
 import socket
@@ -42,9 +42,9 @@ def stub_output(command, args):
 class ShellEmulator:
     """Состояние минимального REPL без файловой системы и конфигурации."""
 
-    def __init__(self):
+    def __init__(self, prompt="$ "):
         """Подготовить постоянное приглашение и флаг завершения."""
-        self.prompt = "$ "
+        self.prompt = prompt
         self.should_exit = False
 
     @property

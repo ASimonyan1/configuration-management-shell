@@ -1,0 +1,11 @@
+# Python-комментарий: эту строку эмулятор пропускает.
+
+  # Комментарий с отступом также пропускается.
+ls
+ls -l /home
+cd /home
+unknown
+ls -x
+cd /one /two
+exit extra
+ls

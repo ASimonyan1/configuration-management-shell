@@ -1,10 +1,12 @@
-"""Графический REPL первого этапа."""
+"""Графический REPL второго этапа и стартовые сценарии."""
 
 import tkinter as tk
 from tkinter import ttk
 
+from .config import iter_script_commands
 from .errors import EmulatorError
 
+SCRIPT_DELAY_MS = 120
 EXIT_DELAY_MS = 100
 
 
@@ -22,7 +24,10 @@ class EmulatorGUI:
         frame.pack(fill="both", expand=True)
         self._create_output(frame)
         self._create_input(frame)
-        self.append(f"{shell.window_title}\nЭтап 1: команды-заглушки.\n\n")
+        self.append(
+            f"{shell.window_title}\n"
+            "Этап 2: конфигурация и команды-заглушки.\n\n"
+        )
 
     def _create_output(self, frame):
         """Добавить защищённый от редактирования журнал диалога."""
@@ -65,3 +70,37 @@ class EmulatorGUI:
         line = self.entry.get()
         self.entry.delete(0, "end")
         self.run_command(line)
+
+    def show_config(self, config, config_path):
+        """Вывести итоговые значения всех четырёх параметров запуска."""
+        self.append(
+            "Параметры запуска:\n"
+            f"VFS: {config.vfs or 'не задан'}\n"
+            f"Prompt: {self.shell.prompt!r}\n"
+            f"Script: {config.script or 'не задан'}\n"
+            f"Config: {config_path or 'не задан'}\n\n"
+        )
+
+    def start_script(self, path):
+        """Загрузить сценарий; при ошибке оставить интерактивный REPL."""
+        if not path:
+            return
+        try:
+            commands = iter(list(iter_script_commands(path)))
+        except EmulatorError as exc:
+            self.append(f"Ошибка: {exc}\n")
+            return
+        self.root.after(SCRIPT_DELAY_MS, lambda: self._script_step(commands))
+
+    def _script_step(self, commands):
+        """Выполнить одну команду сценария без блокирования GUI."""
+        if self.shell.should_exit:
+            return
+        line = next(commands, None)
+        if line is None:
+            return
+        self.run_command(line)
+        if not self.shell.should_exit:
+            self.root.after(
+                SCRIPT_DELAY_MS, lambda: self._script_step(commands)
+            )

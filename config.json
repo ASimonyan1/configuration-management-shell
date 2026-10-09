@@ -1,0 +1,5 @@
+{
+  "vfs": "data/from-json.csv",
+  "prompt": "json> ",
+  "script": "scripts/from_json.txt"
+}
