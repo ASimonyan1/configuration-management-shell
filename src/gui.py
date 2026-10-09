@@ -1,4 +1,4 @@
-"""Графический REPL второго этапа и стартовые сценарии."""
+"""Графический REPL и последовательное выполнение стартового сценария."""
 
 import tkinter as tk
 from tkinter import ttk
@@ -25,9 +25,15 @@ class EmulatorGUI:
         self._create_output(frame)
         self._create_input(frame)
         self.append(
-            f"{shell.window_title}\n"
-            "Этап 2: конфигурация и команды-заглушки.\n\n"
+            f"{shell.window_title}\nТекущий каталог VFS: {shell.vfs.cwd}\n\n"
         )
+
+    def show_vfs(self):
+        """Показать загруженные узлы VFS для демонстрации третьего этапа."""
+        self.append("Загруженные узлы VFS:\n")
+        for path, node in sorted(self.shell.vfs.nodes.items()):
+            self.append(f"{node.kind} {path}\n")
+        self.append("\n")
 
     def _create_output(self, frame):
         """Добавить защищённый от редактирования журнал диалога."""
@@ -75,8 +81,7 @@ class EmulatorGUI:
         """Вывести итоговые значения всех четырёх параметров запуска."""
         self.append(
             "Параметры запуска:\n"
-            f"VFS: {config.vfs or 'не задан'}\n"
-            f"Prompt: {self.shell.prompt!r}\n"
+            f"VFS: {config.vfs}\nPrompt: {self.shell.prompt}\n"
             f"Script: {config.script or 'не задан'}\n"
             f"Config: {config_path or 'не задан'}\n\n"
         )

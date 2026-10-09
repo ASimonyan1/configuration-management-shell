@@ -22,7 +22,7 @@ def parse_args(argv=None):
     parser = argparse.ArgumentParser(
         description="GUI-эмулятор UNIX-подобной оболочки, вариант №26"
     )
-    parser.add_argument("--vfs", help="Путь к VFS (этап 2: вывод параметра)")
+    parser.add_argument("--vfs", help="CSV-файл виртуальной файловой системы")
     parser.add_argument("--prompt", help="Приглашение к вводу")
     parser.add_argument("--script", help="Стартовый сценарий команд")
     parser.add_argument("--config", help="JSON-конфигурация")

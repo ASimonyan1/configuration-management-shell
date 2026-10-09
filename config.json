@@ -1,5 +1,5 @@
 {
-  "vfs": "data/from-json.csv",
-  "prompt": "json> ",
-  "script": "scripts/from_json.txt"
+  "vfs": "vfs.csv",
+  "prompt": "emu> ",
+  "script": "scripts/all_commands.txt"
 }

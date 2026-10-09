@@ -1,0 +1,11 @@
+# VFS загружена до открытия GUI; ls/cd пока выводят имя и аргументы.
+ls
+ls -l /home/student
+cd /home/student/docs/project
+ls -l -l
+ls -x
+ls . /
+cd / /home
+unknown_command
+exit invalid
+ls

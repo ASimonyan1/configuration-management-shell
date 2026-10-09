@@ -1,4 +1,4 @@
-"""Запуск второго этапа: python -m src.main с параметрами."""
+"""Точка входа: python -m src.main из корня репозитория."""
 
 import sys
 import tkinter as tk
@@ -7,17 +7,22 @@ from .config import parse_args, resolve_config
 from .errors import EmulatorError
 from .gui import EmulatorGUI
 from .shell import ShellEmulator
+from .vfs import VirtualFileSystem
 
 
 def build_shell(args):
-    """Применить конфигурацию; путь VFS пока только отображается."""
+    """Проверить настройки и загрузить VFS до открытия окна."""
     config = resolve_config(args)
+    if not config.vfs:
+        raise EmulatorError("Не задан VFS: используйте --vfs или --config")
+    vfs = VirtualFileSystem()
+    vfs.load_csv(config.vfs)
     prompt = "$ " if config.prompt is None else config.prompt
-    return ShellEmulator(prompt), config
+    return ShellEmulator(vfs, prompt), config
 
 
 def main(argv=None):
-    """Открыть REPL или вернуть код 2 при ошибке настроек и окна."""
+    """Запустить GUI; вернуть код 2 при ошибке запуска."""
     args = parse_args(argv)
     try:
         shell, config = build_shell(args)
@@ -27,6 +32,7 @@ def main(argv=None):
         return 2
     gui = EmulatorGUI(root, shell)
     gui.show_config(config, args.config)
+    gui.show_vfs()
     gui.start_script(config.script)
     root.mainloop()
     return 0

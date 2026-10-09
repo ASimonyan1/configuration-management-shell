@@ -1,15 +1,24 @@
-"""Временные файлы для изолированных проверок."""
+"""Изолированные временные файлы для тестов."""
 
 import tempfile
 import unittest
 from pathlib import Path
 
+HEADER = "path,type,content,encoding,owner\n"
+CSV = HEADER + '''/home/u/a.txt,file,"abc
+def
+ghi",text,u
+/home/u/deep/level/f.txt,file,hello,text,u
+/empty,dir,,text,root
+/binary,file,AAEC,base64,root
+'''
+
 
 class TempCase(unittest.TestCase):
-    """Создавать временную папку для каждого теста."""
+    """Создавать и удалять временную папку для каждого теста."""
 
     def setUp(self):
-        """Выделить независимую папку и зарегистрировать очистку."""
+        """Выделить независимую папку и зарегистрировать её очистку."""
         folder = tempfile.TemporaryDirectory()
         self.addCleanup(folder.cleanup)
         self.folder = Path(folder.name)

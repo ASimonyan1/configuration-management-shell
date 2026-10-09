@@ -1,4 +1,4 @@
-"""Этап 2 варианта №26: настраиваемый REPL с заглушками ls/cd."""
+"""Этап 3 варианта №26: VFS в памяти; ls/cd пока заглушки."""
 
 import getpass
 import socket
@@ -40,10 +40,11 @@ def stub_output(command, args):
 
 
 class ShellEmulator:
-    """Состояние минимального REPL без файловой системы и конфигурации."""
+    """Состояние REPL с подключённой VFS и заглушками команд."""
 
-    def __init__(self, prompt="$ "):
+    def __init__(self, vfs, prompt="$ "):
         """Подготовить постоянное приглашение и флаг завершения."""
+        self.vfs = vfs
         self.prompt = prompt
         self.should_exit = False
 
