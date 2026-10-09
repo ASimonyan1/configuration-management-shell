@@ -32,7 +32,6 @@ def main(argv=None):
         return 2
     gui = EmulatorGUI(root, shell)
     gui.show_config(config, args.config)
-    gui.show_vfs()
     gui.start_script(config.script)
     root.mainloop()
     return 0

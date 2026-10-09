@@ -28,13 +28,6 @@ class EmulatorGUI:
             f"{shell.window_title}\nТекущий каталог VFS: {shell.vfs.cwd}\n\n"
         )
 
-    def show_vfs(self):
-        """Показать загруженные узлы VFS для демонстрации третьего этапа."""
-        self.append("Загруженные узлы VFS:\n")
-        for path, node in sorted(self.shell.vfs.nodes.items()):
-            self.append(f"{node.kind} {path}\n")
-        self.append("\n")
-
     def _create_output(self, frame):
         """Добавить защищённый от редактирования журнал диалога."""
         self.output = tk.Text(

@@ -36,7 +36,7 @@ class GUITests(TempCase):
             call.args[1]()
         text = self.transcript()
         self.assertIn("emu> ls\n", text)
-        self.assertIn("Команда: ls", text)
+        self.assertIn("home/", text)
         self.assertIn("Ошибка: unknown", text)
         self.assertNotIn("ls /missing", text)
         self.gui.root.destroy.assert_called_once()
@@ -54,7 +54,7 @@ class GUITests(TempCase):
         self.gui.entry.get.return_value = "ls"
         self.gui._on_enter()
         self.gui.entry.delete.assert_called_once_with(0, "end")
-        self.assertIn("Команда: ls", self.transcript())
+        self.assertIn("home/", self.transcript())
 
     def test_window_initialization(self):
         """Окно получает заголовок ОС, журнал и поле с обработчиком Enter."""
