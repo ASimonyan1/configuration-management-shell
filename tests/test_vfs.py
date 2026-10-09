@@ -24,7 +24,7 @@ class VFSTests(TempCase):
         self.assertEqual(self.vfs.resolve("//home"), "/home")
 
     def test_binary_decoding_and_text_restriction(self):
-        """Base64 декодируется в памяти, текстовые операции его отклоняют."""
+        """Двоичные байты декодируются, текстовые операции их отклоняют."""
         self.assertEqual(self.vfs.get("/binary").content, b"\x00\x01\x02")
         with self.assertRaises(EmulatorError):
             self.vfs.read_text("/binary")
@@ -77,3 +77,20 @@ class VFSTests(TempCase):
         self.vfs.change_dir("/home/u")
         self.assertEqual(self.vfs.read_text("a.txt"), "abc\ndef\nghi")
         self.assertTrue(self.vfs.list_dir())
+
+    def test_base64_utf8_text_and_empty_file(self):
+        """Текст и пустой файл хранятся в Base64 и читаются как UTF-8."""
+        content = HEADER + (
+            "/hello,file,0J/RgNC40LLQtdGC,base64,u\n"
+            "/empty.txt,file,,base64,u\n"
+        )
+        self.vfs.load_csv(self.write_file(content))
+        self.assertEqual(self.vfs.read_text("/hello"), "Привет")
+        self.assertEqual(self.vfs.read_text("/empty.txt"), "")
+
+    def test_plain_text_content_is_rejected(self):
+        """Незакодированное содержимое файлов не принимается."""
+        with self.assertRaises(EmulatorError):
+            self.vfs.load_csv(self.write_file(
+                HEADER + "/plain,file,hello,text,u\n"
+            ))
