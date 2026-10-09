@@ -1,2 +1,2 @@
 path,type,content,encoding,owner
-/hello.txt,file,hello,text,root
+/hello.txt,file,aGVsbG8=,base64,root

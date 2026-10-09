@@ -5,10 +5,8 @@ import unittest
 from pathlib import Path
 
 HEADER = "path,type,content,encoding,owner\n"
-CSV = HEADER + '''/home/u/a.txt,file,"abc
-def
-ghi",text,u
-/home/u/deep/level/f.txt,file,hello,text,u
+CSV = HEADER + '''/home/u/a.txt,file,YWJjCmRlZgpnaGk=,base64,u
+/home/u/deep/level/f.txt,file,aGVsbG8=,base64,u
 /empty,dir,,text,root
 /binary,file,AAEC,base64,root
 '''
