@@ -1,39 +1,36 @@
-"""Точка входа: python -m src.main из корня репозитория."""
+"""Командная строка практики 2, вариант 26."""
 
+import argparse
 import sys
-import tkinter as tk
 
-from .config import parse_args, resolve_config
-from .errors import EmulatorError
-from .gui import EmulatorGUI
-from .shell import ShellEmulator
-from .vfs import VirtualFileSystem
+from .config import load_config
+from .errors import AppError
+from dataclasses import asdict
 
 
-def build_shell(args):
-    """Проверить настройки и загрузить VFS до открытия окна."""
-    config = resolve_config(args)
-    if not config.vfs:
-        raise EmulatorError("Не задан VFS: используйте --vfs или --config")
-    vfs = VirtualFileSystem()
-    vfs.load_csv(config.vfs)
-    prompt = "$ " if config.prompt is None else config.prompt
-    return ShellEmulator(vfs, prompt), config
+def arguments(argv):
+    """Прочитать путь TOML и параметры вывода текущего этапа."""
+    parser = argparse.ArgumentParser(description="Практика 2, вариант 26")
+    parser.add_argument("--config", default="config.toml")
+
+    return parser.parse_args(argv)
+
+
+def execute(args):
+    """Выполнить функциональность только текущего этапа."""
+    config = load_config(args.config)
+    for key, value in asdict(config).items():
+        print(f"{key} = {value}")
 
 
 def main(argv=None):
-    """Запустить GUI; вернуть код 2 при ошибке запуска."""
-    args = parse_args(argv)
+    """Запустить приложение; вывести понятную ошибку без traceback."""
+    args = arguments(argv)
     try:
-        shell, config = build_shell(args)
-        root = tk.Tk()
-    except (EmulatorError, tk.TclError) as exc:
-        print(f"Ошибка запуска: {exc}", file=sys.stderr)
+        execute(args)
+    except (AppError, OSError, RecursionError) as exc:
+        print(f"Ошибка: {exc}", file=sys.stderr)
         return 2
-    gui = EmulatorGUI(root, shell)
-    gui.show_config(config, args.config)
-    gui.start_script(config.script)
-    root.mainloop()
     return 0
 
 

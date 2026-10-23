@@ -1,71 +1,88 @@
-"""Аргументы запуска, JSON-конфигурация и стартовые сценарии."""
+"""Чтение и строгая проверка TOML-конфигурации."""
 
-import argparse
-import json
+import re
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import urlsplit
 
-from .errors import EmulatorError
+from .errors import AppError
 
-
-@dataclass
-class AppConfig:
-    """Пути VFS и сценария, приглашение командной строки."""
-
-    vfs: str | None = None
-    prompt: str | None = None
-    script: str | None = None
+MAX_DEPTH = 100
+FIELDS = {"package", "repository", "test_mode", "version",
+          "max_depth", "filter_substring"}
+PACKAGE = r"(?:@[a-z0-9._-]+/)?[a-z0-9][a-z0-9._-]*"
+VERSION = r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?"
 
 
-def parse_args(argv=None):
-    """Прочитать четыре поддерживаемых параметра командной строки."""
-    parser = argparse.ArgumentParser(
-        description="GUI-эмулятор UNIX-подобной оболочки, вариант №26"
-    )
-    parser.add_argument("--vfs", help="CSV-файл виртуальной файловой системы")
-    parser.add_argument("--prompt", help="Приглашение к вводу")
-    parser.add_argument("--script", help="Стартовый сценарий команд")
-    parser.add_argument("--config", help="JSON-конфигурация")
-    return parser.parse_args(argv)
+@dataclass(frozen=True)
+class Config:
+    """Шесть параметров пользователя и разрешённый путь репозитория."""
+
+    package: str
+    repository: str
+    test_mode: bool
+    version: str
+    max_depth: int
+    filter_substring: str
 
 
-def load_json_config(path):
-    """Прочитать JSON и проверить типы значений настроек."""
+def validate_fields(data):
+    """Проверить полноту и типы параметров до проверки значений."""
+    missing = FIELDS - data.keys()
+    extra = data.keys() - FIELDS
+    if missing or extra:
+        raise AppError(f"Поля TOML: отсутствуют {sorted(missing)}; "
+                       f"неизвестны {sorted(extra)}")
+    for key in FIELDS - {"test_mode", "max_depth"}:
+        if not isinstance(data[key], str):
+            raise AppError(f"{key}: требуется строка")
+    if type(data["test_mode"]) is not bool:
+        raise AppError("test_mode: требуется true или false")
+    depth = data["max_depth"]
+    if type(depth) is not int or not 0 <= depth <= MAX_DEPTH:
+        raise AppError(f"max_depth: целое число от 0 до {MAX_DEPTH}")
+
+
+def validate_values(data, folder):
+    """Проверить имя, версию, URL либо путь и строку фильтра."""
+    pattern = r"[A-Z]+" if data["test_mode"] else PACKAGE
+    if not re.fullmatch(pattern, data["package"]):
+        raise AppError("package: неверное имя пакета")
+    if not re.fullmatch(VERSION, data["version"]):
+        raise AppError("version: требуется точная версия, например 1.0.0")
+    if any(ord(char) < 32 for char in data["filter_substring"]):
+        raise AppError("filter_substring: управляющие символы запрещены")
+    if data["test_mode"]:
+        path = folder / data["repository"]
+        if not data["repository"] or not path.is_file():
+            raise AppError("repository: тестовый файл не найден")
+        data["repository"] = str(path.resolve())
+    else:
+        validate_url(data["repository"])
+
+
+def validate_url(value):
+    """Допустить HTTP(S)-реестр без учётных данных и параметров URL."""
     try:
-        data = json.loads(Path(path).read_text(encoding="utf-8-sig"))
-    except (OSError, UnicodeError, ValueError) as exc:
-        raise EmulatorError(f"Конфигурация: ошибка чтения: {exc}") from exc
-    if not isinstance(data, dict):
-        raise EmulatorError("Конфигурация: корнем JSON должен быть объект")
-    for key in ("vfs", "prompt", "script"):
-        value = data.get(key)
-        if value is not None and not isinstance(value, str):
-            raise EmulatorError(f"Конфигурация: {key} должен быть строкой")
-    return AppConfig(data.get("vfs"), data.get("prompt"), data.get("script"))
+        url = urlsplit(value)
+        valid = (url.scheme in {"http", "https"} and url.hostname
+                 and not url.username and not url.query and not url.fragment)
+        port = url.port
+    except ValueError as exc:
+        raise AppError("repository: неверный URL") from exc
+    if not valid or port == 0:
+        raise AppError("repository: требуется HTTP(S) URL реестра npm")
 
 
-def merge_config(file_config, cli_vfs, cli_prompt, cli_script):
-    """Применить значения CLI поверх JSON, сохранив пустые строки CLI."""
-    return AppConfig(
-        vfs=file_config.vfs if cli_vfs is None else cli_vfs,
-        prompt=file_config.prompt if cli_prompt is None else cli_prompt,
-        script=file_config.script if cli_script is None else cli_script,
-    )
-
-
-def resolve_config(args):
-    """Собрать итоговую конфигурацию с приоритетом аргументов CLI."""
-    config = load_json_config(args.config) if args.config else AppConfig()
-    return merge_config(config, args.vfs, args.prompt, args.script)
-
-
-def iter_script_commands(path):
-    """Читать непустые строки, пропуская комментарии с символом #."""
+def load_config(path):
+    """Загрузить TOML; относительный путь считать от файла конфигурации."""
+    path = Path(path)
     try:
-        lines = Path(path).read_text(encoding="utf-8-sig").splitlines()
-    except (OSError, UnicodeError) as exc:
-        raise EmulatorError(f"Стартовый скрипт: ошибка чтения: {exc}") from exc
-    for line in lines:
-        stripped = line.strip()
-        if stripped and not stripped.startswith("#"):
-            yield line
+        with path.open("rb") as stream:
+            data = tomllib.load(stream)
+    except (OSError, ValueError) as exc:
+        raise AppError(f"Не удалось прочитать TOML: {exc}") from exc
+    validate_fields(data)
+    validate_values(data, path.resolve().parent)
+    return Config(**data)

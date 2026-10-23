@@ -1,0 +1,6 @@
+package = "is-even"
+repository = "https://registry.npmjs.org"
+test_mode = false
+version = "1.0.0"
+max_depth = 8
+filter_substring = ""
