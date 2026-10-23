@@ -1,0 +1,7 @@
+verification@1.0.0 C:\Users\arti\Documents\Codex\2026-09-25\new-chat\tmp\practice2-tools\compare-is-even
+└─┬ is-even@1.0.0
+  └─┬ is-odd@0.1.2
+    └─┬ is-number@3.0.0
+      └─┬ kind-of@3.2.2
+        └── is-buffer@1.1.6
+

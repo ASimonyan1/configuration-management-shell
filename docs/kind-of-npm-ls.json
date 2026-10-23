@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "name": "verification",
+  "dependencies": {
+    "kind-of": {
+      "version": "6.0.3",
+      "resolved": "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz",
+      "overridden": false
+    }
+  }
+}

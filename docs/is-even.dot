@@ -1,0 +1,12 @@
+digraph dependencies {
+  rankdir=LR;
+  n0 [label="is-buffer@1.1.6"];
+  n1 [label="is-even@1.0.0"];
+  n2 [label="is-number@3.0.0"];
+  n3 [label="is-odd@0.1.2"];
+  n4 [label="kind-of@3.2.2"];
+  n1 -> n3;
+  n2 -> n4;
+  n3 -> n2;
+  n4 -> n0;
+}

@@ -1,0 +1,4 @@
+verification@1.0.0 C:\Users\arti\Documents\Codex\2026-09-25\new-chat\tmp\practice2-tools\compare-is-odd
+└─┬ is-odd@3.0.1
+  └── is-number@6.0.0
+

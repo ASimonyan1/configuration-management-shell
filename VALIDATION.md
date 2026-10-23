@@ -1,4 +1,4 @@
-# Проверки этапа 4
+# Проверки этапа 5
 
 23.10.2026. Python 3.12.14.
 
@@ -29,27 +29,15 @@ test_requested_version_and_cache (test_registry.RegistryTests.test_requested_ver
 Используется указанная версия, метаданные читаются один раз. ... ok
 test_selection_and_unsupported_sources (test_registry.RegistryTests.test_selection_and_unsupported_sources)
 Выбирается максимальная версия; git/file не угадываются. ... ok
-test_cycles_and_self_loop (tests.test_graph.GraphTests.test_cycles_and_self_loop)
-Цикл не зацикливает рекурсию и сохраняется в рёбрах. ... ok
-test_depth_and_filter (tests.test_graph.GraphTests.test_depth_and_filter)
-Глубина ноль оставляет корень; фильтр исключает поддерево. ... ok
-test_invalid_repository (tests.test_graph.GraphTests.test_invalid_repository)
-Отсутствующие цели и неверные имена отклоняются. ... ok
-test_shorter_path_reexpands_shared_node (tests.test_graph.GraphTests.test_shorter_path_reexpands_shared_node)
-Более короткий путь раскрывает ещё доступные по глубине узлы. ... ok
-test_cycles_and_self_loop (test_reverse.ReverseTests.test_cycles_and_self_loop)
-Цикл не зацикливает рекурсию и сохраняется в рёбрах. ... ok
-test_depth_and_filter (test_reverse.ReverseTests.test_depth_and_filter)
-Глубина ноль оставляет корень; фильтр исключает поддерево. ... ok
-test_invalid_repository (test_reverse.ReverseTests.test_invalid_repository)
-Отсутствующие цели и неверные имена отклоняются. ... ok
-test_shorter_path_reexpands_shared_node (test_reverse.ReverseTests.test_shorter_path_reexpands_shared_node)
-Более короткий путь раскрывает ещё доступные по глубине узлы. ... ok
-test_transitive_parents_and_cycle (test_reverse.ReverseTests.test_transitive_parents_and_cycle)
-Цель исключается, прямые и транзитивные родители включаются. ... ok
+test_dot_includes_nodes_edges_and_escaping (test_visualize.VisualTests.test_dot_includes_nodes_edges_and_escaping)
+Цикл и изолированный узел не теряются при экспорте. ... ok
+test_missing_graphviz_preserves_dot (test_visualize.VisualTests.test_missing_graphviz_preserves_dot)
+Если dot отсутствует, исходный DOT остаётся доступен. ... ok
+test_renderer_and_viewer (test_visualize.VisualTests.test_renderer_and_viewer)
+dot получает список аргументов, SVG открывается браузером. ... ok
 
 ----------------------------------------------------------------------
-Ran 22 tests in 0.079s
+Ran 16 tests in 0.048s
 
 OK
 Оформление проекта проверено.

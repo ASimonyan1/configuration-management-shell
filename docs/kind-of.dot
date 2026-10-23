@@ -1,0 +1,4 @@
+digraph dependencies {
+  rankdir=LR;
+  n0 [label="kind-of@6.0.3"];
+}

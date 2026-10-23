@@ -1,0 +1,6 @@
+digraph dependencies {
+  rankdir=LR;
+  n0 [label="is-number@6.0.0"];
+  n1 [label="is-odd@3.0.1"];
+  n1 -> n0;
+}
