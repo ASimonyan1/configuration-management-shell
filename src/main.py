@@ -5,7 +5,7 @@ import sys
 
 from .config import load_config
 from .errors import AppError
-from dataclasses import asdict
+from .registry import Registry
 
 
 def arguments(argv):
@@ -19,8 +19,14 @@ def arguments(argv):
 def execute(args):
     """Выполнить функциональность только текущего этапа."""
     config = load_config(args.config)
-    for key, value in asdict(config).items():
-        print(f"{key} = {value}")
+    if config.test_mode:
+        raise AppError("Тестовый источник реализуется на этапе 3")
+    repo = Registry(config.repository)
+    deps = repo.dependencies(config.package, config.version)
+    for name, version in sorted(deps.items()):
+        print(f"{name}: {version}")
+    if not deps:
+        print("Прямых зависимостей нет")
 
 
 def main(argv=None):
