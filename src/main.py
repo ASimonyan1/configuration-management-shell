@@ -6,6 +6,8 @@ import sys
 from .config import load_config
 from .errors import AppError
 from .registry import Registry
+from .test_repository import TestRepository
+from .graph import Builder, graph_text
 
 
 def arguments(argv):
@@ -19,14 +21,10 @@ def arguments(argv):
 def execute(args):
     """Выполнить функциональность только текущего этапа."""
     config = load_config(args.config)
-    if config.test_mode:
-        raise AppError("Тестовый источник реализуется на этапе 3")
-    repo = Registry(config.repository)
-    deps = repo.dependencies(config.package, config.version)
-    for name, version in sorted(deps.items()):
-        print(f"{name}: {version}")
-    if not deps:
-        print("Прямых зависимостей нет")
+    repo = (TestRepository(config.repository) if config.test_mode
+            else Registry(config.repository))
+    graph = Builder(repo, config).build()
+    print(graph_text(graph))
 
 
 def main(argv=None):

@@ -1,4 +1,4 @@
-# Проверки этапа 2
+# Проверки этапа 3
 
 23.10.2026. Python 3.12.14.
 
@@ -11,6 +11,14 @@ test_test_path_relative_to_config (test_config.ConfigTests.test_test_path_relati
 Тестовый путь считается от TOML, а не рабочего каталога. ... ok
 test_valid_and_zero_depth (test_config.ConfigTests.test_valid_and_zero_depth)
 Верные значения и нулевая глубина принимаются. ... ok
+test_cycles_and_self_loop (test_graph.GraphTests.test_cycles_and_self_loop)
+Цикл не зацикливает рекурсию и сохраняется в рёбрах. ... ok
+test_depth_and_filter (test_graph.GraphTests.test_depth_and_filter)
+Глубина ноль оставляет корень; фильтр исключает поддерево. ... ok
+test_invalid_repository (test_graph.GraphTests.test_invalid_repository)
+Отсутствующие цели и неверные имена отклоняются. ... ok
+test_shorter_path_reexpands_shared_node (test_graph.GraphTests.test_shorter_path_reexpands_shared_node)
+Более короткий путь раскрывает ещё доступные по глубине узлы. ... ok
 test_dependencies_validation (test_registry.RegistryTests.test_dependencies_validation)
 Отсутствующие зависимости допустимы, неверные типы запрещены. ... ok
 test_network_and_json_errors (test_registry.RegistryTests.test_network_and_json_errors)
@@ -23,7 +31,7 @@ test_selection_and_unsupported_sources (test_registry.RegistryTests.test_selecti
 Выбирается максимальная версия; git/file не угадываются. ... ok
 
 ----------------------------------------------------------------------
-Ran 9 tests in 0.028s
+Ran 13 tests in 0.042s
 
 OK
 Оформление проекта проверено.

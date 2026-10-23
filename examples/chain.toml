@@ -1,0 +1,6 @@
+package = "A"
+repository = "chain.json"
+test_mode = true
+version = "1.0.0"
+max_depth = 8
+filter_substring = ""

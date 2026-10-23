@@ -1,6 +1,6 @@
-package = "is-odd"
-repository = "https://registry.npmjs.org"
-test_mode = false
-version = "3.0.1"
+package = "A"
+repository = "examples/cycle.json"
+test_mode = true
+version = "1.0.0"
 max_depth = 8
 filter_substring = ""
