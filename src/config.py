@@ -9,6 +9,7 @@ from urllib.parse import urlsplit
 from .errors import AppError
 
 MAX_DEPTH = 100
+FIRST_PRINTABLE_CODE_POINT = 32
 FIELDS = {"package", "repository", "test_mode", "version",
           "max_depth", "filter_substring"}
 PACKAGE = r"(?:@[a-z0-9._-]+/)?[a-z0-9][a-z0-9._-]*"
@@ -51,7 +52,8 @@ def validate_values(data, folder):
         raise AppError("package: неверное имя пакета")
     if not re.fullmatch(VERSION, data["version"]):
         raise AppError("version: требуется точная версия, например 1.0.0")
-    if any(ord(char) < 32 for char in data["filter_substring"]):
+    if any(ord(char) < FIRST_PRINTABLE_CODE_POINT
+           for char in data["filter_substring"]):
         raise AppError("filter_substring: управляющие символы запрещены")
     if data["test_mode"]:
         path = folder / data["repository"]
