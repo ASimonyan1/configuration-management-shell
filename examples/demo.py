@@ -12,6 +12,7 @@ def main():
     for name in names:
         command = [sys.executable, "-m", "src.main", "--config",
                    f"examples/{name}.toml"]
+        command += ["--reverse-target", "C"]
         print("Пример:", name, flush=True)
         subprocess.run(command, cwd=root, check=False)
 
