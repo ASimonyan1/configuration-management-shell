@@ -1,5 +1,19 @@
 # Конфигурационное управление - вариант 26
 
+## Практическая работа 2 — вариант 26
+
+Пять самостоятельных этапов анализа npm-зависимостей:
+
+- [Этап 1: TOML-конфигурация](https://github.com/ASimonyan1/configuration-management-shell/tree/practice2-submission-1)
+- [Этап 2: Прямые зависимости npm](https://github.com/ASimonyan1/configuration-management-shell/tree/practice2-submission-2)
+- [Этап 3: Рекурсивный DFS](https://github.com/ASimonyan1/configuration-management-shell/tree/practice2-submission-3)
+- [Этап 4: Обратные зависимости](https://github.com/ASimonyan1/configuration-management-shell/tree/practice2-submission-4)
+- [Этап 5: Визуализация Graphviz](https://github.com/ASimonyan1/configuration-management-shell/tree/practice2-submission-5)
+
+Запуск из папки выбранного этапа: `python -m src.main --config config.toml`.
+Нужен Python 3.11+, для этапа 5 также Graphviz (`dot` в PATH).
+Ветки первой практики перечислены ниже.
+
 Для поэтапной сдачи выбирайте ветки submission-1–submission-5.
 Каждая ветка содержит свой README, команды запуска и результат этапа.
 
