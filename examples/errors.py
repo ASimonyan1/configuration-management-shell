@@ -5,6 +5,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+EXPECTED_ERROR_EXIT_CODE = 2
+
 
 def main():
     """Показать ошибки шести параметров и синтаксиса TOML."""
@@ -26,7 +28,7 @@ def main():
             result = subprocess.run(
                 [sys.executable, "-m", "src.main", "--config", str(path)],
                 cwd=root, check=False)
-            if result.returncode != 2:
+            if result.returncode != EXPECTED_ERROR_EXIT_CODE:
                 raise RuntimeError("Ожидался код ошибки 2")
 
 
